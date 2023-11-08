@@ -1,0 +1,11 @@
+{
+  "cookie": {
+    "originalMaxAge": 60000,
+    "expires": "2023-11-01T23:48:06.475Z",
+    "httpOnly": true,
+    "path": "/"
+  },
+  "__lastAccess": 1698882426475,
+  "name": "claudia",
+  "email": "ptest@mail.com"
+}
