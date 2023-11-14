@@ -55,7 +55,7 @@ catch (error){
 //login
 router.get("/login", (req, res) => {
   if (req.session.user) {
-    return res.redirect("/catalogue");
+    return res.redirect("/api/views/products");
   }
   res.render("login",{style: "login"});
 });
@@ -67,13 +67,24 @@ router.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-router.get("/catalogue", (req, res) => {
+router.get("/catalogue",async (req, res) => {
   if (!req.session.passport) {
     return res.redirect("/login");
   }
+  try {
+      const products = await manager.findAll(req.query)
+      const {payload, info, page, limit, order, query} = products
+      const { nextPage, prevPage } = info
+      const {category} = query
+      /* res.render("catalogue", {payload}); */
+      const productObject = payload.map(doc => doc.toObject());
   const { first_name, email } = req.user;
   console.log(first_name, email);
-  res.render("catalogue", { user: { first_name, email } });
+  res.render("catalogue", {  productList: productObject, category, page: page, limit: limit, order: order, nextPage: nextPage, prevPage:prevPage, style: "style"  ,user: { first_name, email } });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+
 });
 
 router.get("/restaurar", (req, res) => {
