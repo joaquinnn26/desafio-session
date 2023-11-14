@@ -57,7 +57,7 @@ router.get("/login", (req, res) => {
   if (req.session.user) {
     return res.redirect("/catalogue");
   }
-  res.render("login");
+  res.render("login",{style: "login"});
 });
 
 router.get("/signup", (req, res) => {
@@ -68,11 +68,21 @@ router.get("/signup", (req, res) => {
 });
 
 router.get("/catalogue", (req, res) => {
-  if (!req.session.user) {
+  if (!req.session.passport) {
     return res.redirect("/login");
   }
-  console.log(req.session.user);
-  res.render("catalogue", { user: req.session.user });
+  const { first_name, email } = req.user;
+  console.log(first_name, email);
+  res.render("catalogue", { user: { first_name, email } });
 });
+
+router.get("/restaurar", (req, res) => {
+  res.render("restaurar");
+});
+
+router.get("/error", (req, res) => {
+  res.render("error");
+});
+
 
 export default router;

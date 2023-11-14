@@ -8,16 +8,19 @@ import sessionsRouter from "./routes/sessions.router.js";
 import session from "express-session";
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/cart.router.js";
-
-
 import "./db/configDB.js";
 import fileStore from "session-file-store";
 const FileStore = fileStore(session);
 import MongoStore from "connect-mongo";
+import "./passport.js"
+import passport from "passport";
+
+//app express
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/public"));
 app.use(cookieParser("SecretCookie"));
 
 // session
@@ -34,7 +37,7 @@ app.use(cookieParser("SecretCookie"));
 
 //mongo
 const URI =
-  "mongodb+srv://coderhouse:coderhouse@cluster0.sugvijj.mongodb.net/session47315?retryWrites=true&w=majority";
+  "mongodb+srv://joaquinfefe:ecommercecoder@ecommerce.gmltjrj.mongodb.net/?retryWrites=true&w=majority";
 app.use(
   session({
     store: new MongoStore({
@@ -44,7 +47,9 @@ app.use(
     cookie: { maxAge: 60000 },
   })
 );
-
+//passport
+app.use(passport.initialize());
+app.use(passport.session());
 // handlebars
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
